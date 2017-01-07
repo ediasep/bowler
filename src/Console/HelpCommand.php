@@ -2,8 +2,6 @@
 
 namespace Ediasep\Bowler\Console;
 
-use App\User;
-use App\DripEmailer;
 use Illuminate\Console\Command;
 
 class HelpCommand extends Command
