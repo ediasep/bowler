@@ -7,11 +7,6 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-**Note:** Replace ```Asep Edi Kurniawan``` ```ediasep``` ```https://github.com/ediasep``` ```asepedikurniawan@gmail.com``` ```ediasep``` ```bowler``` ```Admin Panel Helper``` with their correct values in [README.md](README.md), [CHANGELOG.md](CHANGELOG.md), [CONTRIBUTING.md](CONTRIBUTING.md), [LICENSE.md](LICENSE.md) and [composer.json](composer.json) files, then delete this line. You can run `$ php prefill.php` in the command line to make all replacements at once. Delete the file prefill.php as well.
-
-This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what
-PSRs you support to avoid any confusion with users and contributors.
-
 ## Install
 
 Via Composer
@@ -20,11 +15,10 @@ Via Composer
 $ composer require ediasep/bowler
 ```
 
-## Usage
+Then add this line into providers array in `config/app.php` file.
 
 ``` php
-$skeleton = new ediasep\bowler();
-echo $skeleton->echoPhrase('Hello, League!');
+Ediasep\Bowler\BowlerServiceProvider::class,
 ```
 
 ## Change log

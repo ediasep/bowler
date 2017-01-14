@@ -8,7 +8,7 @@ class BowlerServiceProvider extends ServiceProvider
 {
 
     protected $commands = [
-        'Ediasep\Bowler\Console\HelpCommand',
+        'Ediasep\Bowler\Console\MigrationCommand',
     ];
 
     /**
