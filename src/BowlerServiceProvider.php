@@ -27,7 +27,7 @@ class BowlerServiceProvider extends ServiceProvider
      * @return void
      */
 
-    public function register(){
+    public function register() {
         $this->commands($this->commands);
     }
 }
