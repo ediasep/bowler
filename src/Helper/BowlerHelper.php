@@ -131,8 +131,9 @@ class BowlerHelper
         $i = 1;
         foreach ($fields as $field) {
 
-            if ($i != 1)
-                $field_string .= "\n\t\t\t";
+            if ($i != 1) {
+                            $field_string .= "\n\t\t\t";
+            }
 
             // Check if field type is increment
             if ($this->isIncrement($field)) {
@@ -182,8 +183,9 @@ class BowlerHelper
      **/
     public function isIncrement($field)
     {
-        if (!isset($field->EXTRA))
-            return false;
+        if (!isset($field->EXTRA)) {
+                    return false;
+        }
 
         if ($field->EXTRA != 'auto_increment') {
             return false;
@@ -200,14 +202,17 @@ class BowlerHelper
      **/
     public function hasLength($field)
     {
-        if (!isset($field->CHARACTER_MAXIMUM_LENGTH))
-            return false;
+        if (!isset($field->CHARACTER_MAXIMUM_LENGTH)) {
+                    return false;
+        }
 
-        if (empty($field->CHARACTER_MAXIMUM_LENGTH))
-            return false;
+        if (empty($field->CHARACTER_MAXIMUM_LENGTH)) {
+                    return false;
+        }
 
-        if ($field->DATA_TYPE == 'text')
-            return false;
+        if ($field->DATA_TYPE == 'text') {
+                    return false;
+        }
 
         return true;
     }
