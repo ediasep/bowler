@@ -137,18 +137,12 @@ class BowlerHelper
 				$field_string .= "\n\t\t\t";
 
 			// Check if field type is increment
-			if($this->isIncrement($field)){
-				$field_type = 'increments';
-			} else {
-				$field_type = $this->fieldtype[$field->DATA_TYPE];
-			}
+			$field_type = $this->isIncrement($field) ? 'increments' : $this->fieldtype[$field->DATA_TYPE];
 
 			// Check if field has length attribute
-			if($this->hasLength($field)){
-				$field_string .= sprintf("\$table->%s('%s', %d)", $field_type, $field->COLUMN_NAME, $field->CHARACTER_MAXIMUM_LENGTH);
-			} else {
-				$field_string .= sprintf("\$table->%s('%s')", $field_type, $field->COLUMN_NAME);
-			}
+			$field_string .= $this->hasLength($field) ?
+							 $this->fieldStringWithLength($field, $field_type) :
+							 $this->fieldStringNoLength($field, $field_type);
 
 			$field_string .= ';';
 
@@ -166,12 +160,48 @@ class BowlerHelper
 	 **/
     public function replaceAndSave($oldFile, $search, $replace, $newFile = null)
     {
-        $newFile   = ($newFile == null) ? $oldFile : $newFile;
+        $newFile   = ($newFile === null) ? $oldFile : $newFile;
         $file      = $this->files->get($oldFile);
         $replacing = str_replace($search, $replace, $file);
 
         $this->files->put($newFile, $replacing);
     }
+
+    /**
+     * Generate field string with length arg
+     *
+     * @return String
+     * @author Asep Edi Kurniawan
+     **/
+    public function fieldStringWithLength($field, $field_type)
+    {
+    	$field_string = sprintf(
+				"\$table->%s('%s', %d)", 
+				$field_type, 
+				$field->COLUMN_NAME, 
+				$field->CHARACTER_MAXIMUM_LENGTH
+		);
+
+    	return $field_string;
+	}
+
+
+	/**
+	 * Generate field string without length arg
+	 *
+	 * @return String
+	 * @author Asep Edi Kurniawan
+	 **/
+	public function fieldStringNoLength($field, $field_type)
+	{
+		$field_string = sprintf(
+			"\$table->%s('%s')", 
+			$field_type, 
+			$field->COLUMN_NAME
+		);
+
+		return $field_string;
+	}
 
     /**
      * Check whether the field is autoincrement
