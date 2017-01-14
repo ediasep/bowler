@@ -2,10 +2,8 @@
 
 namespace Ediasep\Bowler\Helper;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\Artisan;
 
 class BowlerHelper 
 {
@@ -58,7 +56,7 @@ class BowlerHelper
 		'varchar'   => 'string',
 		'text'      => 'text',
 		'time'      => 'time',
-		'timestamp' => 'timestamp'];
+		'timestamp' => 'timestamp' ];
 
     /**
      * Create a new instance.
@@ -85,7 +83,7 @@ class BowlerHelper
 		**/
 
 		// MySQL
-		$fields = DB::select("SELECT * FROM information_schema.columns WHERE table_schema = ? AND table_name = ?", [$database, $table]);
+		$fields = DB::select("SELECT * FROM information_schema.columns WHERE table_schema = ? AND table_name = ?", [ $database, $table ]);
 
 		return $fields;
 	}
@@ -101,7 +99,7 @@ class BowlerHelper
 		$field_string = $this->generateFieldList($fields);
 		$new_file     = $this->generateMigrationFilename($table);
 
-        $this->replaceAndSave($this->stub_path.'Migration.stub', ['{{table}}', '{{Table}}' ,'{{fields}}'], [$table, ucwords($table), $field_string], $new_file);
+        $this->replaceAndSave($this->stub_path.'Migration.stub', [ '{{table}}', '{{Table}}', '{{fields}}' ], [ $table, ucwords($table), $field_string ], $new_file);
 
         return basename($new_file);
 	}
@@ -115,7 +113,7 @@ class BowlerHelper
 	public function generateMigrationFilename($table)
 	{
 		$prefix   = date('Y_m_d_His');
-		$filename = $this->migration_path . sprintf('%s_create_%s_table', $prefix, $table).'.php';
+		$filename = $this->migration_path.sprintf('%s_create_%s_table', $prefix, $table).'.php';
 
 		return $filename;
 	}
@@ -132,10 +130,10 @@ class BowlerHelper
 
 		$i = 1;
 		foreach ($fields as $field) {
-			if($i!= 1)
+			if ($i != 1)
 				$field_string .= "\n\t\t\t";
 
-			$field_string .= sprintf("\$table->%s('%s');", $this->fieldtype[$field->DATA_TYPE], $field->COLUMN_NAME);
+			$field_string .= sprintf("\$table->%s('%s');", $this->fieldtype[ $field->DATA_TYPE ], $field->COLUMN_NAME);
 			$i++;
 		}
 
@@ -145,6 +143,9 @@ class BowlerHelper
 	/**
 	 * Replace stub file content
 	 *
+	 * @param string $oldFile
+	 * @param string[] $search
+	 * @param string $newFile
 	 * @return void
 	 * @author Asep Edi Kurniawan
 	 **/
