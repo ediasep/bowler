@@ -50,10 +50,10 @@ class MigrationCommand extends Command
         $args   = $this->arguments();
 
         $this->info("Retrieving table field...");
-        $fields = $this->helper->getTableFields($args['database'], $args['table']);
+        $fields = $this->helper->getTableFields($args[ 'database' ], $args[ 'table' ]);
 
         $this->info("Creating Migration...");
-        $filename = $this->helper->createMigration($fields, $args['table']);
+        $filename = $this->helper->createMigration($fields, $args[ 'table' ]);
         
         $this->info("Migration created : ".$filename);
     }

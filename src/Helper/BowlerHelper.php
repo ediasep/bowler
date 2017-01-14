@@ -2,10 +2,8 @@
 
 namespace Ediasep\Bowler\Helper;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\Artisan;
 
 class BowlerHelper 
 {
@@ -58,7 +56,7 @@ class BowlerHelper
 		'varchar'   => 'string',
 		'text'      => 'text',
 		'time'      => 'time',
-		'timestamp' => 'timestamp'];
+		'timestamp' => 'timestamp' ];
 
     /**
      * Create a new instance.
@@ -85,7 +83,7 @@ class BowlerHelper
 		**/
 
 		// MySQL
-		$fields = DB::select("SELECT * FROM information_schema.columns WHERE table_schema = ? AND table_name = ?", [$database, $table]);
+		$fields = DB::select("SELECT * FROM information_schema.columns WHERE table_schema = ? AND table_name = ?", [ $database, $table ]);
 
 		return $fields;
 	}
@@ -101,7 +99,7 @@ class BowlerHelper
 		$field_string = $this->generateFieldList($fields);
 		$new_file     = $this->generateMigrationFilename($table);
 
-        $this->replaceAndSave($this->stub_path.'Migration.stub', ['{{table}}', '{{Table}}' ,'{{fields}}'], [$table, ucwords($table), $field_string], $new_file);
+        $this->replaceAndSave($this->stub_path.'Migration.stub', [ '{{table}}', '{{Table}}', '{{fields}}' ], [ $table, ucwords($table), $field_string ], $new_file);
 
         return basename($new_file);
 	}
@@ -115,7 +113,7 @@ class BowlerHelper
 	public function generateMigrationFilename($table)
 	{
 		$prefix   = date('Y_m_d_His');
-		$filename = $this->migration_path . sprintf('%s_create_%s_table', $prefix, $table).'.php';
+		$filename = $this->migration_path.sprintf('%s_create_%s_table', $prefix, $table).'.php';
 
 		return $filename;
 	}
@@ -133,18 +131,18 @@ class BowlerHelper
 		$i = 1;
 		foreach ($fields as $field) {
 
-			if($i!= 1)
+			if ($i != 1)
 				$field_string .= "\n\t\t\t";
 
 			// Check if field type is increment
-			if($this->isIncrement($field)){
+			if ($this->isIncrement($field)) {
 				$field_type = 'increments';
 			} else {
-				$field_type = $this->fieldtype[$field->DATA_TYPE];
+				$field_type = $this->fieldtype[ $field->DATA_TYPE ];
 			}
 
 			// Check if field has length attribute
-			if($this->hasLength($field)){
+			if ($this->hasLength($field)) {
 				$field_string .= sprintf("\$table->%s('%s', %d)", $field_type, $field->COLUMN_NAME, $field->CHARACTER_MAXIMUM_LENGTH);
 			} else {
 				$field_string .= sprintf("\$table->%s('%s')", $field_type, $field->COLUMN_NAME);
@@ -161,6 +159,9 @@ class BowlerHelper
 	/**
 	 * Replace stub file content
 	 *
+	 * @param string $oldFile
+	 * @param string[] $search
+	 * @param string $newFile
 	 * @return void
 	 * @author Asep Edi Kurniawan
 	 **/
@@ -181,14 +182,14 @@ class BowlerHelper
      **/
     public function isIncrement($field)
     {
-    	if(!isset($field->EXTRA))
-    		return false;
+        if(!isset($field->EXTRA))
+            return false;
 
-    	if($field->EXTRA != 'auto_increment'){
-    		return false;
-    	}
+        if($field->EXTRA != 'auto_increment'){
+            return false;
+        }
 
-    	return true;
+        return true;
     }
 
     /**
@@ -199,16 +200,16 @@ class BowlerHelper
      **/
     public function hasLength($field)
     {
-    	if(!isset($field->CHARACTER_MAXIMUM_LENGTH))
-    		return false;
+        if(!isset($field->CHARACTER_MAXIMUM_LENGTH))
+            return false;
 
-    	if(empty($field->CHARACTER_MAXIMUM_LENGTH))
-    		return false;
+        if(empty($field->CHARACTER_MAXIMUM_LENGTH))
+            return false;
 
-    	if($field->DATA_TYPE == 'text')
-    		return false;
+        if($field->DATA_TYPE == 'text')
+            return false;
 
-    	return true;
+        return true;
     }
 
 } // END class BowlerHelper 
