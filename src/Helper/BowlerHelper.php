@@ -113,7 +113,7 @@ class BowlerHelper
     public function generateMigrationFilename($table)
     {
         $prefix   = date('Y_m_d_His');
-        $filename = $this->migration_path . sprintf('%s_create_%s_table', $prefix, $table).'.php';
+        $filename = $this->migration_path.sprintf('%s_create_%s_table', $prefix, $table).'.php';
 
         return $filename;
     }
@@ -131,16 +131,15 @@ class BowlerHelper
         $i = 1;
         foreach ($fields as $field) {
 
-            if($i!= 1)
+            if ($i != 1)
                 $field_string .= "\n\t\t\t";
 
             // Check if field type is increment
-            $field_type = $this->isIncrement($field) ? 'increments' : $this->fieldtype[$field->DATA_TYPE];
+            $field_type = $this->isIncrement($field) ? 'increments' : $this->fieldtype[ $field->DATA_TYPE ];
 
             // Check if field has length attribute
             $field_string .= $this->hasLength($field) ?
-                             $this->fieldStringWithLength($field, $field_type) :
-                             $this->fieldStringNoLength($field, $field_type);
+                             $this->fieldStringWithLength($field, $field_type) : $this->fieldStringNoLength($field, $field_type);
 
             $field_string .= ';';
 
@@ -177,34 +176,34 @@ class BowlerHelper
      **/
     public function fieldStringWithLength($field, $field_type)
     {
-    	$field_string = sprintf(
-				"\$table->%s('%s', %d)", 
-				$field_type, 
-				$field->COLUMN_NAME, 
-				$field->CHARACTER_MAXIMUM_LENGTH
-		);
+        $field_string = sprintf(
+                "\$table->%s('%s', %d)", 
+                $field_type, 
+                $field->COLUMN_NAME, 
+                $field->CHARACTER_MAXIMUM_LENGTH
+        );
 
-    	return $field_string;
-	}
+        return $field_string;
+    }
 
 
-	/**
-	 * Generate field string without length arg
-	 *
-	 * @param string $field_type
-	 * @return String
-	 * @author Asep Edi Kurniawan
-	 **/
-	public function fieldStringNoLength($field, $field_type)
-	{
-		$field_string = sprintf(
-			"\$table->%s('%s')", 
-			$field_type, 
-			$field->COLUMN_NAME
-		);
+    /**
+     * Generate field string without length arg
+     *
+     * @param string $field_type
+     * @return String
+     * @author Asep Edi Kurniawan
+     **/
+    public function fieldStringNoLength($field, $field_type)
+    {
+        $field_string = sprintf(
+            "\$table->%s('%s')", 
+            $field_type, 
+            $field->COLUMN_NAME
+        );
 
-		return $field_string;
-	}
+        return $field_string;
+    }
 
     /**
      * Check whether the field is autoincrement
