@@ -1,7 +1,7 @@
 {
     "name": "ediasep/bowler",
     "type": "library",
-    "description": "Admin Panel Helper",
+    "description": "Manage Your Database with Artisan Command",
     "keywords": [
         "Ediasep",
         "Bowler"
