@@ -102,53 +102,53 @@ class BowlerHelper
         $this->replaceAndSave($this->stub_path.'Migration.stub', [ '{{table}}', '{{Table}}', '{{fields}}' ], [ $table, ucwords($table), $field_string ], $new_file);
 
         return basename($new_file);
-	}
+    }
 
-	/**
-	 * Generate Migration Filename
-	 *
-	 * @return string
-	 * @author Asep Edi Kurniawan
-	 **/
-	public function generateMigrationFilename($table)
-	{
-		$prefix   = date('Y_m_d_His');
-		$filename = $this->migration_path . sprintf('%s_create_%s_table', $prefix, $table).'.php';
+    /**
+     * Generate Migration Filename
+     *
+     * @return string
+     * @author Asep Edi Kurniawan
+     **/
+    public function generateMigrationFilename($table)
+    {
+        $prefix   = date('Y_m_d_His');
+        $filename = $this->migration_path . sprintf('%s_create_%s_table', $prefix, $table).'.php';
 
-		return $filename;
-	}
+        return $filename;
+    }
 
-	/**
-	 * Generate field list in string format
-	 *
-	 * @return String
-	 * @author Asep Edi Kurniawan
-	 **/
-	public function generateFieldList($fields)
-	{
-		$field_string = "";
+    /**
+     * Generate field list in string format
+     *
+     * @return String
+     * @author Asep Edi Kurniawan
+     **/
+    public function generateFieldList($fields)
+    {
+        $field_string = "";
 
-		$i = 1;
-		foreach ($fields as $field) {
+        $i = 1;
+        foreach ($fields as $field) {
 
-			if($i!= 1)
-				$field_string .= "\n\t\t\t";
+            if($i!= 1)
+                $field_string .= "\n\t\t\t";
 
-			// Check if field type is increment
-			$field_type = $this->isIncrement($field) ? 'increments' : $this->fieldtype[$field->DATA_TYPE];
+            // Check if field type is increment
+            $field_type = $this->isIncrement($field) ? 'increments' : $this->fieldtype[$field->DATA_TYPE];
 
-			// Check if field has length attribute
-			$field_string .= $this->hasLength($field) ?
-							 $this->fieldStringWithLength($field, $field_type) :
-							 $this->fieldStringNoLength($field, $field_type);
+            // Check if field has length attribute
+            $field_string .= $this->hasLength($field) ?
+                             $this->fieldStringWithLength($field, $field_type) :
+                             $this->fieldStringNoLength($field, $field_type);
 
-			$field_string .= ';';
+            $field_string .= ';';
 
-			$i++;
-		}
+            $i++;
+        }
 
-		return $field_string;
-	}
+        return $field_string;
+    }
 
     /**
      * Replace stub file content
@@ -171,6 +171,7 @@ class BowlerHelper
     /**
      * Generate field string with length arg
      *
+     * @param string $field_type
      * @return String
      * @author Asep Edi Kurniawan
      **/
@@ -190,6 +191,7 @@ class BowlerHelper
 	/**
 	 * Generate field string without length arg
 	 *
+	 * @param string $field_type
 	 * @return String
 	 * @author Asep Edi Kurniawan
 	 **/
