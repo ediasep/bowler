@@ -35,7 +35,7 @@ class BowlerHelper
 	 * Datatype Mapping
 	 *
 	 * @var string
-	 * bigIncrements, Increments, Morphs, nullableTimeStamps
+	 * bigIncrements, Morphs, nullableTimeStamps
 	 * softDeletes, string with length, timestamp, rememberToken
 	 **/
 	protected $fieldtype = [  
@@ -132,10 +132,26 @@ class BowlerHelper
 
 		$i = 1;
 		foreach ($fields as $field) {
+
 			if($i!= 1)
 				$field_string .= "\n\t\t\t";
 
-			$field_string .= sprintf("\$table->%s('%s');", $this->fieldtype[$field->DATA_TYPE], $field->COLUMN_NAME);
+			// Check if field type is increment
+			if($this->isIncrement($field)){
+				$field_type = 'increments';
+			} else {
+				$field_type = $this->fieldtype[$field->DATA_TYPE];
+			}
+
+			// Check if field has length attribute
+			if($this->hasLength($field)){
+				$field_string .= sprintf("\$table->%s('%s', %d)", $field_type, $field->COLUMN_NAME, $field->CHARACTER_MAXIMUM_LENGTH);
+			} else {
+				$field_string .= sprintf("\$table->%s('%s')", $field_type, $field->COLUMN_NAME);
+			}
+
+			$field_string .= ';';
+
 			$i++;
 		}
 
@@ -156,4 +172,43 @@ class BowlerHelper
 
         $this->files->put($newFile, $replacing);
     }
+
+    /**
+     * Check whether the field is autoincrement
+     *
+     * @return Boolean
+     * @author Asep Edi Kurniawan
+     **/
+    public function isIncrement($field)
+    {
+    	if(!isset($field->EXTRA))
+    		return false;
+
+    	if($field->EXTRA != 'auto_increment'){
+    		return false;
+    	}
+
+    	return true;
+    }
+
+    /**
+     * Check whether the field has length attribute
+     *
+     * @return Boolean
+     * @author Asep Edi Kurniawan
+     **/
+    public function hasLength($field)
+    {
+    	if(!isset($field->CHARACTER_MAXIMUM_LENGTH))
+    		return false;
+
+    	if(empty($field->CHARACTER_MAXIMUM_LENGTH))
+    		return false;
+
+    	if($field->DATA_TYPE == 'text')
+    		return false;
+
+    	return true;
+    }
+
 } // END class BowlerHelper 
