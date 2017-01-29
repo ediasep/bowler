@@ -30,9 +30,18 @@ class BowlerHelper
     protected $migration_path;
 
     /**
+     * Generated seeder file path
+     * app/database/seeds
+     *
+     * @var string
+     **/
+    protected $seed_path;
+
+    /**
      * Datatype Mapping
      *
      * @var string
+     * Some type not included:
      * bigIncrements, Morphs, nullableTimeStamps
      * softDeletes, string with length, timestamp, rememberToken
      **/
@@ -67,6 +76,7 @@ class BowlerHelper
         $this->files          = $files;
         $this->stub_path      = __DIR__.'/../Stub/';
         $this->migration_path = database_path().'/migrations/';
+        $this->seed_path      = database_path().'/seeds/';
     }
 
     /**
@@ -215,6 +225,72 @@ class BowlerHelper
         }
 
         return true;
+    }
+
+    /**
+     * Create Table for Seeder
+     *
+     * @return String
+     * @author Asep Edi Kurniawan
+     **/
+    public function createSeeder($table)
+    {
+        $new_file       = $this->generateSeederFilename($table);
+        $content_string = $this->generateSeederFieldList($table);
+
+        $this->replaceAndSave($this->stub_path.'Seeder.stub', [ '{{table}}', '{{Model}}', '{{Content}}' ], [ $table, ucwords($table), $content_string ], $new_file);
+    }
+
+    /**
+     * Generate Seeder Filename
+     *
+     * @return String
+     * @author Asep Edi Kurniawan
+     **/
+    public function generateSeederFilename($table)
+    {
+        $filename = $this->seed_path.sprintf('%sTableSeeder.php', ucwords($table));
+        return $filename;
+    }
+
+    /**
+     * Generate Field List for Seeder
+     *
+     * @return String
+     * @author Asep Edi Kurniawan
+     **/
+    public function generateSeederFieldList($table)
+    {
+        // Query
+        $query = sprintf("SELECT * FROM %s", $table); 
+
+        // MySQL
+        $fields = DB::select($query);
+
+        // Content String
+        $content_string = "";
+
+        // Field List
+        foreach ($fields as $field) {
+
+            // local var
+            $j = 1;
+            $column_count = count((array)$field);
+
+            // Field String
+            $field_string = "[\n\t\t\t";
+            foreach ($field as $key => $value) {
+                $line_breaker  = ($j < $column_count) ? "',\n\t\t\t" : "',\n\t\t";
+                $field_string .= "'$key'"." => '". trim($value) . $line_breaker;
+                $j++;
+            }
+
+            $field_string .= "]";
+
+            $content_string .= sprintf("DB::table('%s')->insert(%s);\n\n\t\t", $table, $field_string);
+        }
+
+        return $content_string;
     }
 
 } // END class BowlerHelper 

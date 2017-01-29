@@ -1,4 +1,4 @@
-# bowler
+# Bowler
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
@@ -25,19 +25,23 @@ Ediasep\Bowler\BowlerServiceProvider::class,
 
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
 
-## Testing
+## Usage
+
+Create migration from a table
 
 ``` bash
-$ composer test
+$ php artisan bowler:migration laravel user
+```
+
+Create migration from a table along with seeder
+
+``` bash
+$ php artisan bowler:migration laravel user --withseeder
 ```
 
 ## Contributing
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) and [CONDUCT](CONDUCT.md) for details.
-
-## Security
-
-If you discover any security related issues, please email asepedikurniawan@gmail.com instead of using the issue tracker.
 
 ## Credits
 

@@ -12,7 +12,7 @@ class MigrationCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'bowler:migration {database} {table}';
+    protected $signature = 'bowler:migration {database} {table} {--withseeder}';
 
     /**
      * The console command description.
@@ -47,13 +47,22 @@ class MigrationCommand extends Command
      */
     public function handle()
     {
+        // Database and table name
         $args   = $this->arguments();
+
+        // isWithSeeder
+        $opts   = $this->option();
 
         $this->info("Retrieving table field...");
         $fields = $this->helper->getTableFields($args[ 'database' ], $args[ 'table' ]);
 
         $this->info("Creating Migration...");
         $filename = $this->helper->createMigration($fields, $args[ 'table' ]);
+
+        if($opts[ 'withseeder' ]){
+            $this->info("Creating Seeder...");
+            $seeder_filename = $this->helper->createSeeder($args[ 'table' ]);
+        }
         
         $this->info("Migration created : ".$filename);
     }
