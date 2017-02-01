@@ -58,12 +58,14 @@ class MigrationCommand extends Command
 
         $this->info("Creating Migration...");
         $filename = $this->helper->createMigration($fields, $args[ 'table' ]);
+        $this->info("Migration created : ".$filename);
 
         if($opts[ 'withseeder' ]){
             $this->info("Creating Seeder...");
-            $seeder_filename = $this->helper->createSeeder($args[ 'table' ]);
+            $seeder_filename = $this->helper->createSeeder($args[ 'database' ] ,$args[ 'table' ]);
+
+            $this->info("Seeder created : ".$seeder_filename);
         }
         
-        $this->info("Migration created : ".$filename);
     }
 }

@@ -2,8 +2,8 @@
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
-[![Build Status][ico-travis]][link-travis]
-[![Coverage Status][ico-scrutinizer]][link-scrutinizer]
+<!-- [![Build Status][ico-travis]][link-travis]
+[![Coverage Status][ico-scrutinizer]][link-scrutinizer] -->
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
@@ -30,13 +30,13 @@ Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recen
 Create migration from a table
 
 ``` bash
-$ php artisan bowler:migration laravel user
+$ php artisan bowler:migration {database} {table}
 ```
 
 Create migration from a table along with seeder
 
 ``` bash
-$ php artisan bowler:migration laravel user --withseeder
+$ php artisan bowler:migration {database} {table} {--withseeder}
 ```
 
 ## Contributing

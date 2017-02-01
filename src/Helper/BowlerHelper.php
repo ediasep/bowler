@@ -263,12 +263,14 @@ class BowlerHelper
      * @return String
      * @author Asep Edi Kurniawan
      **/
-    public function createSeeder($table)
+    public function createSeeder($database, $table)
     {
         $new_file       = $this->generateSeederFilename($table);
-        $content_string = $this->generateSeederFieldList($table);
+        $content_string = $this->generateSeederFieldList($database, $table);
 
         $this->replaceAndSave($this->stub_path.'Seeder.stub', [ '{{table}}', '{{Model}}', '{{Content}}' ], [ $table, ucwords($table), $content_string ], $new_file);
+
+        return basename($new_file);
     }
 
     /**
@@ -289,10 +291,10 @@ class BowlerHelper
      * @return String
      * @author Asep Edi Kurniawan
      **/
-    public function generateSeederFieldList($table)
+    public function generateSeederFieldList($database, $table)
     {
         // Query
-        $query = sprintf("SELECT * FROM %s", $table); 
+        $query = sprintf("SELECT * FROM %s.%s", $database, $table); 
 
         // MySQL
         $fields = DB::select($query);
@@ -311,7 +313,7 @@ class BowlerHelper
             $field_string = "[\n\t\t\t";
             foreach ($field as $key => $value) {
                 $line_breaker  = ($j < $column_count) ? "',\n\t\t\t" : "',\n\t\t";
-                $field_string .= "'$key'"." => '". trim($value) . $line_breaker;
+                $field_string .= "'$key'"." => '". trim(addslashes($value)) . $line_breaker;
                 $j++;
             }
 
