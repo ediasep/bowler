@@ -17,6 +17,7 @@ class Create{{Table}}Table extends Migration
         
         Schema::create('{{table}}', function (Blueprint $table) {
             {{fields}}
+            $table->timestamps();
         });
     }
 
